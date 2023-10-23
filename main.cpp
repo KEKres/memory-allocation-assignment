@@ -1,4 +1,4 @@
-// read data from a file, process it, use it to preform memory allocation and deallocation operations on a linked list
+
 
 #include "assignedLL.h"
 #include <vector>
@@ -8,7 +8,8 @@
 int main(int argc, char** argv) {
     std::vector<int> size;
     std::vector<std::string> function;
-    //read in file
+    
+    //read in data from file
 
     std::ifstream in;
     in.open(argv[1]);
@@ -37,9 +38,6 @@ int main(int argc, char** argv) {
 
             pos = line.find(delimiter);
 
-            //std::cout <<"here" << std::endl;
-            //std::cout << line.substr(pos+2) << std::endl;
-
             a = std::stoi(line.substr(pos+2));
             b = line.substr(0, pos);
 
@@ -48,6 +46,7 @@ int main(int argc, char** argv) {
         }
     }
 
+    // print allocated list
     AssignedLL* list = new AssignedLL();
 
     for (std::vector<int>::size_type i = 0; i < size.size(); i++) {

@@ -60,10 +60,7 @@ void AssignedLL::dealloc(){
 }
 
 AssignedLL::~AssignedLL() {
-    // std::cout << "Destructor called" << std::endl;
-    std::cout << "Destructor called" << std::endl;
-
-    std::cout << "Allocated List" << std::endl;
+    // allocated list
     for (auto i = allocatedList.begin(); i != allocatedList.end(); ++i) {
 
         std::cout << (*i)->space << " " << (*i)->used << " " << (*i)->size <<std::endl;
@@ -75,8 +72,7 @@ AssignedLL::~AssignedLL() {
         delete *i;
     }
 
-    std::cout << "Free List" << std::endl;
-
+    // free list
     for (auto i = freeList.begin(); i != freeList.end(); ++i) {
 
         std::cout << (*i)->space << " " << (*i)->used << " " << (*i)->size <<std::endl;

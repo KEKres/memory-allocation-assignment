@@ -6,7 +6,7 @@ we assume the perfect scenario to simplify the task.)*/
 
 void* AssignedLL::alloc(std::size_t size){
 
-    std::size_t allocateMem = 500;
+    std::size_t allocateMem = 512;
 
     //finds a chunk from the free list that is big enough to fit the size
 
@@ -58,7 +58,7 @@ void* AssignedLL::alloc(std::size_t size){
     allocation* new_chunk = new allocation{allocateMem,size, new_space};
     allocatedList.push_back(new_chunk);
     return new_space;
-    
+
 }
 
 void AssignedLL::dealloc(){
@@ -75,10 +75,7 @@ void AssignedLL::dealloc(){
 }
 
 AssignedLL::~AssignedLL() {
-    // std::cout << "Destructor called" << std::endl;
-    std::cout << "Destructor called" << std::endl;
-
-    std::cout << "Allocated List" << std::endl;
+    // allocated list
     for (auto i = allocatedList.begin(); i != allocatedList.end(); ++i) {
 
         std::cout << (*i)->space << " " << (*i)->used << " " << (*i)->size <<std::endl;
@@ -90,8 +87,7 @@ AssignedLL::~AssignedLL() {
         delete *i;
     }
 
-    std::cout << "Free List" << std::endl;
-
+    // free list
     for (auto i = freeList.begin(); i != freeList.end(); ++i) {
 
         std::cout << (*i)->space << " " << (*i)->used << " " << (*i)->size <<std::endl;
