@@ -59,7 +59,7 @@ int main(int argc, char** argv) {
             std::cout << "Error: invalid function" << std::endl;
         }
     }
-    list->printAllocatedList();
+    list->printLists();
     delete list;
     return 0;
 

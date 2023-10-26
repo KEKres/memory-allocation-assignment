@@ -24,7 +24,7 @@ class AssignedLL{
         void dealloc(void* chunk_space);
         void dealloc();
 
-        void printAllocatedList();
+        void printLists();
 };
 
 #endif  // LINKEDLIST_H

@@ -69,7 +69,7 @@ void AssignedLL::dealloc(){
     freeList.push_back(chunk);
 }
 
-void AssignedLL::printAllocatedList() {
+void AssignedLL::printLists() {
     // allocated list
     std::cout << "Allocated List" << std::endl;
     for (const auto& chunk : allocatedList) {
