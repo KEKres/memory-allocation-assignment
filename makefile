@@ -1,12 +1,14 @@
+.default: all
 
+PROGRAMS=firstfit bestfit
 
-all: firstfit bestfit
-
-firstfit: firstfit.cpp
-    g++ -Wall -Werror -std=c++20 -o firstfit main.cpp firstfit.cpp
-
-bestfit: bestfit.cpp
-    g++ -Wall -Werror -std=c++20 -o bestfit main.cpp bestfit.cpp
+all: $(PROGRAMS)
 
 clean:
-    rm -f firstfit bestfit *.dSYM
+	rm -rf $(PROGRAMS) *.o *.dSYM
+
+firstfit: firstfit.o main.o
+	g++ -Wall -Werror -std=c++20 -g -o $@ $^
+
+bestfit: bestfit.o main.o
+	g++ -Wall -Werror -std=c++20 -g -o $@ $^

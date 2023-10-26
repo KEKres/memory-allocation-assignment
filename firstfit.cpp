@@ -61,6 +61,7 @@ void AssignedLL::dealloc(){
 
 AssignedLL::~AssignedLL() {
     // allocated list
+    std::cout << "Allocated List" << std::endl;
     for (auto i = allocatedList.begin(); i != allocatedList.end(); ++i) {
 
         std::cout << (*i)->space << " " << (*i)->used << " " << (*i)->size <<std::endl;
@@ -73,6 +74,7 @@ AssignedLL::~AssignedLL() {
     }
 
     // free list
+    std::cout << "Free List" << std::endl;
     for (auto i = freeList.begin(); i != freeList.end(); ++i) {
 
         std::cout << (*i)->space << " " << (*i)->used << " " << (*i)->size <<std::endl;
