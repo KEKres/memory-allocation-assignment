@@ -2,6 +2,16 @@
 
 #include "assignedLL.h"
 
+AssignedLL::AssignedLL(){
+    allocatedList = std::list<allocation*>();
+    freeList = std::list<allocation*>();
+}
+        
+// Destructor
+AssignedLL::~AssignedLL(){
+
+}
+
 void* AssignedLL::alloc(std::size_t size){
     for (auto i = freeList.begin(); i != freeList.end(); ++i) {
         if ((*i)->size >= size) {
@@ -59,29 +69,30 @@ void AssignedLL::dealloc(){
     freeList.push_back(chunk);
 }
 
-AssignedLL::~AssignedLL() {
+void AssignedLL::printAllocatedList() {
     // allocated list
     std::cout << "Allocated List" << std::endl;
-    for (auto i = allocatedList.begin(); i != allocatedList.end(); ++i) {
+    for (const auto& chunk : allocatedList) {
 
-        std::cout << (*i)->space << " " << (*i)->used << " " << (*i)->size <<std::endl;
-        int ret = brk((*i)->space);
+        std::cout << "Address: " << chunk->space << " Total Size: " << chunk->size << " Used Size: " << chunk->used <<std::endl;
+        int ret = brk(chunk->space);
         if (ret == -1) {
             std::cout << "brk encountered error" << std::endl;
         }
-        
-        delete *i;
     }
 
     // free list
     std::cout << "Free List" << std::endl;
-    for (auto i = freeList.begin(); i != freeList.end(); ++i) {
+    for (const auto& chunk : freeList) {
 
-        std::cout << (*i)->space << " " << (*i)->used << " " << (*i)->size <<std::endl;
-        int ret2 = brk((*i)->space);
+        std::cout << "Address: " << chunk->space << " Total Size: " << chunk->size << " Used Size: " << chunk->used <<std::endl;
+        int ret2 = brk(chunk->space);
         if (ret2 == -1) {
             std::cout << "brk encountered error" << std::endl;
         }
-        delete *i;
     }
+
 }
+
+
+

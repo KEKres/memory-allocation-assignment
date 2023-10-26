@@ -1,5 +1,4 @@
 
-
 #include "assignedLL.h"
 #include <vector>
 #include <iostream>
@@ -46,7 +45,7 @@ int main(int argc, char** argv) {
         }
     }
 
-    // print allocated list
+    // program actually starts here
     AssignedLL* list = new AssignedLL();
 
     for (std::vector<int>::size_type i = 0; i < size.size(); i++) {
@@ -60,6 +59,8 @@ int main(int argc, char** argv) {
             std::cout << "Error: invalid function" << std::endl;
         }
     }
+    list->printAllocatedList();
     delete list;
     return 0;
+
 }

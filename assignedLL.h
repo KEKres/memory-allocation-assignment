@@ -6,8 +6,6 @@
 #include <cstdlib>
 #include <unistd.h>
 
-
-
 class AssignedLL{
     public:
         struct allocation {
@@ -19,16 +17,14 @@ class AssignedLL{
         std::list<allocation*> allocatedList;
         std::list<allocation*> freeList;
 
+        AssignedLL();
+        ~AssignedLL();
+
         void* alloc(std::size_t chunk_size);
         void dealloc(void* chunk_space);
         void dealloc();
 
-
-        AssignedLL();
-        ~AssignedLL();
-
         void printAllocatedList();
 };
-
 
 #endif  // LINKEDLIST_H

@@ -4,6 +4,16 @@ we assume the perfect scenario to simplify the task.)*/
 
 #include "assignedLL.h"
 
+AssignedLL::AssignedLL(){
+    allocatedList = std::list<allocation*>();
+    freeList = std::list<allocation*>();
+}
+        
+// Destructor
+AssignedLL::~AssignedLL(){
+
+}
+
 void* AssignedLL::alloc(std::size_t size){
 
     std::size_t allocateMem = 512;
@@ -74,7 +84,7 @@ void AssignedLL::dealloc(){
     freeList.push_back(chunk);
 }
 
-AssignedLL::~AssignedLL() {
+void AssignedLL::printAllocatedList() {
     // allocated list
     for (auto i = allocatedList.begin(); i != allocatedList.end(); ++i) {
 
