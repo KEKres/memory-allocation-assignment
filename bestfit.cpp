@@ -7,6 +7,8 @@ we assume the perfect scenario to simplify the task.)*/
 AssignedLL::AssignedLL(){
     allocatedList = std::list<allocation*>();
     freeList = std::list<allocation*>();
+    allocationRequests = 0;
+    deallocationRequests = 0;
 }
         
 // Destructor
@@ -16,28 +18,9 @@ AssignedLL::~AssignedLL(){
 
 void* AssignedLL::alloc(std::size_t size){
 
-    std::size_t allocateMem = 512;
-
-    //finds a chunk from the free list that is big enough to fit the size
-
-    for (auto i = freeList.begin(); i != freeList.end(); ++i) {
-        if ((*i)->size >= size) {
-            if ((*i)->size < allocateMem){
-                allocateMem = (*i)->size;
-            }
-        }
-    }
-
-    for (auto i = freeList.begin(); i != freeList.end(); ++i) {
-        if ((*i)->size == allocateMem) {
-            allocation* chunk = *i;
-            freeList.erase(i);
-            chunk->used = size;
-            allocatedList.push_back(chunk);
-            return chunk->space;
-        }
-    }
-
+    allocation* bestFitChunk = nullptr;
+    std::size_t bestFitSize = std::numeric_limits<std::size_t>::max();
+    std::size_t allocateMem;
     // If no suitable chunk is found in the free list, use sbrk() to allocate more memory.
 
     if (size <= 32){
@@ -65,10 +48,27 @@ void* AssignedLL::alloc(std::size_t size){
         throw std::bad_alloc();
     }
 
-    allocation* new_chunk = new allocation{allocateMem,size, new_space};
-    allocatedList.push_back(new_chunk);
-    return new_space;
+    // Find the best fit chunk
+    for (auto i = freeList.begin(); i != freeList.end(); ++i) {
+        if ((*i)->size >= size) {
+            if ((*i)->size < bestFitSize) {
+                bestFitSize = (*i)->size;
+                bestFitChunk = *i;
+            }
+        }
+    }
+    if (bestFitChunk != nullptr) {
+        bestFitChunk->used = size;
+        allocatedList.push_back(bestFitChunk);
+        freeList.remove(bestFitChunk);
+        return bestFitChunk->space;
+    }
 
+    allocation* new_chunk = new allocation{allocateMem, size, new_space};
+    allocatedList.push_back(new_chunk);
+    allocationRequests++;
+    return new_space;
+    
 }
 
 void AssignedLL::dealloc(){
@@ -82,29 +82,53 @@ void AssignedLL::dealloc(){
     chunk->used = 0;
     allocatedList.pop_back();
     freeList.push_back(chunk);
+    deallocationRequests++;
 }
 
-void AssignedLL::printAllocatedList() {
-    // allocated list
-    for (auto i = allocatedList.begin(); i != allocatedList.end(); ++i) {
+std::size_t AssignedLL::getAllocationRequests() const {
+    return allocationRequests;
+}
 
-        std::cout << (*i)->space << " " << (*i)->used << " " << (*i)->size <<std::endl;
-        int ret = brk((*i)->space);
+std::size_t AssignedLL::getDeallocationRequests() const {
+    return deallocationRequests;
+}
+
+
+void AssignedLL::printLists() {
+    // allocated list
+    std::cout << "Allocated List" << std::endl;
+
+    std::size_t totalAllocatedSize = 0;
+    std::size_t totalUsedSize = 0;
+
+    for (const auto& chunk : allocatedList) {
+
+        std::cout << "Address: " << chunk->space << " Total Chunk Size: " << chunk->size << " Used Chunk Size: " << chunk->used <<std::endl;
+        totalAllocatedSize += chunk->size;
+        totalUsedSize += chunk->used;
+        int ret = brk(chunk->space);
         if (ret == -1) {
             std::cout << "brk encountered error" << std::endl;
         }
-        
-        delete *i;
     }
 
     // free list
-    for (auto i = freeList.begin(); i != freeList.end(); ++i) {
+    std::cout << "Free List" << std::endl;
 
-        std::cout << (*i)->space << " " << (*i)->used << " " << (*i)->size <<std::endl;
-        int ret2 = brk((*i)->space);
+    std::size_t totalFreeSize = 0;
+
+    for (const auto& chunk : freeList) {
+
+        std::cout << "Address: " << chunk->space << " Total Chunk Size: " << chunk->size << " Used Chunk Size: " << chunk->used <<std::endl;
+        totalFreeSize += chunk->size;
+        int ret2 = brk(chunk->space);
         if (ret2 == -1) {
             std::cout << "brk encountered error" << std::endl;
         }
-        delete *i;
     }
+
+    std::cout << "Total Allocated Size: " << totalAllocatedSize << std::endl;
+    std::cout << "Total Used Size: " << totalUsedSize << std::endl;
+    std::cout << "Total Free Size: " << totalFreeSize << std::endl;
+
 }

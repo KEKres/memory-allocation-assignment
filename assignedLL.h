@@ -4,6 +4,7 @@
 #include <iostream>
 #include <list>
 #include <cstdlib>
+#include <limits>
 #include <unistd.h>
 
 class AssignedLL{
@@ -24,7 +25,16 @@ class AssignedLL{
         void dealloc(void* chunk_space);
         void dealloc();
 
+
+        std::size_t getAllocationRequests() const;
+        std::size_t getDeallocationRequests() const;
+
+
         void printLists();
+    
+    private:
+        std::size_t allocationRequests;
+        std::size_t deallocationRequests;
 };
 
 #endif  // LINKEDLIST_H

@@ -5,6 +5,8 @@
 AssignedLL::AssignedLL(){
     allocatedList = std::list<allocation*>();
     freeList = std::list<allocation*>();
+    allocationRequests = 0;
+    deallocationRequests = 0;
 }
         
 // Destructor
@@ -20,6 +22,7 @@ void* AssignedLL::alloc(std::size_t size){
             chunk->used = size;
             allocatedList.push_back(chunk);
             return chunk->space;
+            
         }
     }
 
@@ -53,7 +56,9 @@ void* AssignedLL::alloc(std::size_t size){
 
     allocation* new_chunk = new allocation{allocateMem, size, new_space};
     allocatedList.push_back(new_chunk);
+    allocationRequests++;
     return new_space;
+
 }
 
 void AssignedLL::dealloc(){
@@ -67,14 +72,30 @@ void AssignedLL::dealloc(){
     chunk->used = 0;
     allocatedList.pop_back();
     freeList.push_back(chunk);
+    deallocationRequests++;
 }
+
+std::size_t AssignedLL::getAllocationRequests() const {
+    return allocationRequests;
+}
+
+std::size_t AssignedLL::getDeallocationRequests() const {
+    return deallocationRequests;
+}
+
 
 void AssignedLL::printLists() {
     // allocated list
     std::cout << "Allocated List" << std::endl;
+
+    std::size_t totalAllocatedSize = 0;
+    std::size_t totalUsedSize = 0;
+
     for (const auto& chunk : allocatedList) {
 
-        std::cout << "Address: " << chunk->space << " Total Size: " << chunk->size << " Used Size: " << chunk->used <<std::endl;
+        std::cout << "Address: " << chunk->space << " Total Chunk Size: " << chunk->size << " Used Chunk Size: " << chunk->used <<std::endl;
+        totalAllocatedSize += chunk->size;
+        totalUsedSize += chunk->used;
         int ret = brk(chunk->space);
         if (ret == -1) {
             std::cout << "brk encountered error" << std::endl;
@@ -83,14 +104,22 @@ void AssignedLL::printLists() {
 
     // free list
     std::cout << "Free List" << std::endl;
+
+    std::size_t totalFreeSize = 0;
+
     for (const auto& chunk : freeList) {
 
-        std::cout << "Address: " << chunk->space << " Total Size: " << chunk->size << " Used Size: " << chunk->used <<std::endl;
+        std::cout << "Address: " << chunk->space << " Total Chunk Size: " << chunk->size << " Used Chunk Size: " << chunk->used <<std::endl;
+        totalFreeSize += chunk->size;
         int ret2 = brk(chunk->space);
         if (ret2 == -1) {
             std::cout << "brk encountered error" << std::endl;
         }
     }
+
+    std::cout << "Total Allocated Size: " << totalAllocatedSize << std::endl;
+    std::cout << "Total Used Size: " << totalUsedSize << std::endl;
+    std::cout << "Total Free Size: " << totalFreeSize << std::endl;
 
 }
 

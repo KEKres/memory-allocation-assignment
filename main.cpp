@@ -3,6 +3,7 @@
 #include <vector>
 #include <iostream>
 #include <fstream>
+#include <chrono>
 
 int main(int argc, char** argv) {
     std::vector<int> size;
@@ -19,6 +20,8 @@ int main(int argc, char** argv) {
     }
     std::string line;
 
+    // start recording duration
+    auto start = std::chrono::high_resolution_clock::now();
 
     while (std::getline(in, line)) {
         int a;
@@ -45,7 +48,7 @@ int main(int argc, char** argv) {
         }
     }
 
-    // program actually starts here
+
     AssignedLL* list = new AssignedLL();
 
     for (std::vector<int>::size_type i = 0; i < size.size(); i++) {
@@ -60,7 +63,20 @@ int main(int argc, char** argv) {
         }
     }
     list->printLists();
+    std::cout << "Total Allocation Requests: " << list->getAllocationRequests() << std::endl;
+    std::cout << "Total Deallocation Requests: " << list->getDeallocationRequests() << std::endl;
+
     delete list;
+
+    auto stop = std::chrono::high_resolution_clock::now();
+
+    // Calculates time
+    auto duration = std::chrono::duration_cast<std::chrono::microseconds>(stop - start);
+
+    // Print the total runtime in microseconds
+    std::cout << "Total runtime: " << duration.count() << " microseconds" << std::endl;
+
+
     return 0;
 
 }
