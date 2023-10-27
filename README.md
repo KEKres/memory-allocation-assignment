@@ -10,5 +10,7 @@ make all
 ./(strategy) (datafile)
 
 EXAMPLE
+
 ./firstfit datafile20_1
+
 ./bestfit datafile20_1
