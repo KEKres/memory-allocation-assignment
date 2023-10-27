@@ -5,6 +5,7 @@ Run instructions:
 1. Run the make file to compile
 
 make all
+
 3. Run the experiment with desired strategy and datafile
 ./(strategy) (datafile)
 
