@@ -2,9 +2,10 @@
 Operating Systems Principles Assignment 3: memory allocation 
 
 Run instructions:
-1. Run the make file to compile 
+1. Run the make file to compile
+
 make all
-2. Run the experiment with desired strategy and datafile
+3. Run the experiment with desired strategy and datafile
 ./(strategy) (datafile)
 
 EXAMPLE
